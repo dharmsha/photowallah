@@ -9,7 +9,7 @@ import ThemeRegistry from './ThemeRegistry';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'DostPhoto - Wedding Photography Specialists',
+  title: 'VatsStudio - Wedding Photography Specialists',
   description: 'Professional wedding photography services capturing your special moments',
 };
 

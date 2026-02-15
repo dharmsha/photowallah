@@ -14,7 +14,7 @@ const testimonials = [
     name: 'Priya & Rajesh',
     weddingDate: 'Dec 2023',
     venue: 'Taj Palace, Delhi',
-    quote: "DostPhoto didn't just take pictures; they captured our soul. Every smile, every tear, and every laugh looks like a frame from a Bollywood movie. Professionalism at its peak!",
+    quote: "VatsStudio didn't just take pictures; they captured our soul. Every smile, every tear, and every laugh looks like a frame from a Bollywood movie. Professionalism at its peak!",
     rating: 5,
     photo: '/images/couples/couple1.jpg',
     featuredImage: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop',

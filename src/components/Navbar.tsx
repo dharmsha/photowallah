@@ -43,7 +43,7 @@ export default function Navbar() {
               <Camera className="h-6 w-6 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tighter text-white leading-none">DOSTPHOTO</span>
+              <span className="text-xl font-black tracking-tighter text-white leading-none">VatsStudio</span>
               <span className="text-[10px] uppercase tracking-widest text-pink-500 font-bold">Studio</span>
             </div>
           </Link>

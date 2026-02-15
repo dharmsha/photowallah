@@ -82,7 +82,7 @@ export default function HeroSection() {
                 
                 <Box>
                   <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-1px', mb: 0.5 }}>
-                    Aryan Sharma
+                    Kundan Vats
                   </Typography>
                   <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
                     Lead Cinematographer

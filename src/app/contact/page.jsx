@@ -22,9 +22,9 @@ export default function ContactPage() {
 
   // Har object ko ek unique ID de di hai key ke liye
   const contactInfo = [
-    { id: 'phone', icon: <Phone size={24} />, title: "Call Us", details: "+91 98765 43210", sub: "Mon-Sat, 10am-7pm" },
+    { id: 'phone', icon: <Phone size={24} />, title: "Call Us", details: "+91 9835665318", sub: "Mon-Sat, 10am-7pm" },
     { id: 'email', icon: <Mail size={24} />, title: "Email Us", details: "hello@studio.com", sub: "24/7 Online Support" },
-    { id: 'location', icon: <MapPin size={24} />, title: "Visit Us", details: "Bandra West, Mumbai", sub: "Maharashtra, India" },
+    { id: 'location', icon: <MapPin size={24} />, title: "Visit Us", details: "P&m Mall Patna", sub: "Bihar India, India" },
   ];
 
   const socials = [

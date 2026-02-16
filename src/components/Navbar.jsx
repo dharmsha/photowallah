@@ -91,7 +91,7 @@ export default function Navbar() {
             
             {/* Logo Section */}
             <Link 
-              href="/" 
+              href="/logo.jpeg" 
               className="group flex items-center space-x-2 relative z-50" 
               onClick={() => setIsMenuOpen(false)}
             >

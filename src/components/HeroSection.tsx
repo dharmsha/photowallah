@@ -77,7 +77,7 @@ export default function HeroSection() {
                     border: '4px solid #fff', 
                     boxShadow: '0 0 30px rgba(255,255,255,0.1)' 
                   }} 
-                  src="/photographer.jpg" 
+                  src="/kundan.jpg" 
                 />
                 
                 <Box>

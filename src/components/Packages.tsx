@@ -15,7 +15,15 @@ import {
   Crown,
   Star,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Send,
+  User,
+  Phone,
+  Calendar,
+  Mail,
+  MapPin,
+  MessageSquare,
+  X as CloseIcon
 } from 'lucide-react';
 
 const packages = [
@@ -86,9 +94,30 @@ const addons = [
   { name: 'Gift Shoot', price: '₹9,999', icon: Gift },
 ];
 
+interface FormData {
+  name: string;
+  phone: string;
+  email: string;
+  eventDate: string;
+  eventLocation: string;
+  message: string;
+}
+
 export default function Packages() {
   const [selectedPackage, setSelectedPackage] = useState('premium');
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    phone: '',
+    email: '',
+    eventDate: '',
+    eventLocation: '',
+    message: '',
+  });
 
   const toggleAddon = (addon: string) => {
     setSelectedAddons(prev =>
@@ -98,13 +127,98 @@ export default function Packages() {
 
   const calculateTotal = () => {
     const basePackage = packages.find(p => p.id === selectedPackage);
-    if (!basePackage) return '0';
+    if (!basePackage) return '₹0';
     let total = parseInt(basePackage.price.replace(/[^0-9]/g, ''));
     selectedAddons.forEach(addonName => {
       const addon = addons.find(a => a.name === addonName);
       if (addon) total += parseInt(addon.price.replace(/[^0-9]/g, ''));
     });
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(total);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const generateWhatsAppMessage = () => {
+    const selectedPkg = packages.find(p => p.id === selectedPackage);
+    const selectedAddonsList = selectedAddons.map(addon => {
+      const addonDetails = addons.find(a => a.name === addon);
+      return `• ${addon} (${addonDetails?.price})`;
+    }).join('\n');
+
+    return encodeURIComponent(
+      `*New Booking Enquiry* 📸
+
+*Customer Details:*
+• Name: ${formData.name}
+• Phone: ${formData.phone}
+• Email: ${formData.email || 'Not provided'}
+
+*Event Details:*
+• Date: ${formData.eventDate || 'Not specified'}
+• Location: ${formData.eventLocation || 'Not specified'}
+
+*Selected Package:*
+• ${selectedPkg?.name} - ${selectedPkg?.price} (${selectedPkg?.duration})
+
+${selectedAddons.length > 0 ? `*Add-ons Selected:*\n${selectedAddonsList}` : '*No add-ons selected*'}
+
+*Total Estimated: ${calculateTotal()}*
+
+*Message:*
+${formData.message || 'No additional message'}
+
+*Submitted from Wedding Photography Packages*`
+    );
+  };
+
+  const handleBookNow = () => {
+    setShowBookingForm(true);
+    setSubmitStatus('idle');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Validate phone number
+    if (!formData.phone || formData.phone.length < 10) {
+      alert('Please enter a valid phone number');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const whatsappNumber = '9835665318';
+      const message = generateWhatsAppMessage();
+      
+      // Open WhatsApp with the message
+      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+      
+      setSubmitStatus('success');
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setShowBookingForm(false);
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          eventDate: '',
+          eventLocation: '',
+          message: '',
+        });
+        setSubmitStatus('idle');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Error sending to WhatsApp:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -240,12 +354,12 @@ export default function Packages() {
                         <span className="text-pink-200 text-xs font-black uppercase tracking-widest block mb-1">Estimated Total</span>
                         <span className="text-5xl font-black text-white tracking-tighter">{calculateTotal()}</span>
                     </div>
-                    <Link
-                        href="/bookings"
+                    <button
+                        onClick={handleBookNow}
                         className="w-full md:w-auto bg-white text-black px-10 py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all active:scale-95"
                     >
                         BOOK NOW <ArrowRight size={20} />
-                    </Link>
+                    </button>
                 </div>
             </div>
             
@@ -254,6 +368,195 @@ export default function Packages() {
             </p>
         </div>
       </div>
+
+      {/* Booking Form Modal */}
+      {showBookingForm && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-zinc-900 rounded-[2.5rem] border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-zinc-900 p-6 border-b border-white/10 flex justify-between items-center">
+              <div>
+                <h3 className="text-2xl font-black flex items-center gap-2">
+                  <Send size={20} className="text-pink-500" />
+                  Complete Your Booking
+                </h3>
+                <p className="text-zinc-400 text-sm mt-1">
+                  Selected: {packages.find(p => p.id === selectedPackage)?.name}
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowBookingForm(false)}
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+              >
+                <CloseIcon size={20} />
+              </button>
+            </div>
+
+            {submitStatus === 'success' ? (
+              <div className="p-12 text-center">
+                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check size={40} className="text-green-500" />
+                </div>
+                <h4 className="text-2xl font-black mb-2">Booking Initiated!</h4>
+                <p className="text-zinc-400 mb-6">Redirecting to WhatsApp to complete your booking...</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Name Field */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <User size={14} className="text-pink-500" />
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="John Doe"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-pink-500 transition-colors"
+                    />
+                  </div>
+
+                  {/* Phone Field */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <Phone size={14} className="text-pink-500" />
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="9835665318"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-pink-500 transition-colors"
+                    />
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <Mail size={14} className="text-pink-500" />
+                      Email (Optional)
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="john@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-pink-500 transition-colors"
+                    />
+                  </div>
+
+                  {/* Event Date */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <Calendar size={14} className="text-pink-500" />
+                      Event Date (Optional)
+                    </label>
+                    <input
+                      type="date"
+                      name="eventDate"
+                      value={formData.eventDate}
+                      onChange={handleInputChange}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white [color-scheme:dark] focus:outline-none focus:border-pink-500 transition-colors"
+                    />
+                  </div>
+
+                  {/* Event Location */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <MapPin size={14} className="text-pink-500" />
+                      Event Location (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      name="eventLocation"
+                      value={formData.eventLocation}
+                      onChange={handleInputChange}
+                      placeholder="City, Venue"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-pink-500 transition-colors"
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                      <MessageSquare size={14} className="text-pink-500" />
+                      Additional Message (Optional)
+                    </label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={4}
+                      placeholder="Tell us more about your event..."
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-pink-500 transition-colors resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Selected Add-ons Summary */}
+                {selectedAddons.length > 0 && (
+                  <div className="bg-white/5 rounded-2xl p-4">
+                    <p className="text-xs font-black uppercase tracking-wider text-pink-500 mb-2">Selected Add-ons:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedAddons.map(addon => (
+                        <span key={addon} className="text-xs bg-pink-500/20 px-3 py-1 rounded-full">
+                          {addon}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Total Summary */}
+                <div className="bg-gradient-to-r from-pink-600/20 to-rose-600/20 rounded-2xl p-4 border border-pink-500/30">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-black uppercase tracking-wider">Estimated Total:</span>
+                    <span className="text-2xl font-black text-pink-500">{calculateTotal()}</span>
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-2">
+                    You will be redirected to WhatsApp to confirm your booking
+                  </p>
+                </div>
+
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowBookingForm(false)}
+                    className="flex-1 py-4 rounded-2xl font-black text-sm uppercase tracking-widest border border-white/10 hover:bg-white/5 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 bg-pink-600 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? 'Sending...' : (
+                      <>
+                        Send via WhatsApp
+                        <Send size={16} />
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <p className="text-xs text-center text-zinc-500">
+                  By submitting, you agree to our terms and privacy policy
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

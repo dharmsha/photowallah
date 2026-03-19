@@ -90,10 +90,10 @@ export default function HeroSection() {
                   src="/kundan.jpg"
                   imgProps={{
                     loading: 'eager',
-                    onError: (e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/logo.jpeg';
-                    }
+                    // onError: (e) => {
+                    //   e.target.onerror = null;
+                    //   e.target.src = '/logo.jpeg';
+                    // }
                   }}
                   sx={{
                     width: 120,

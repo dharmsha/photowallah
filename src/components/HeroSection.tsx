@@ -26,7 +26,7 @@ export default function HeroSection() {
       sx={{ position: 'relative', minHeight: '100vh', bgcolor: '#000', color: '#fff' }}
     >
       {/* Background Video */}
-      <Box sx={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
         <video
           ref={videoRef}
           autoPlay
@@ -34,7 +34,6 @@ export default function HeroSection() {
           loop
           playsInline
           preload="auto"
-          poster="/kundan.jpg" // 👈 fallback background
           style={{
             width: '100%',
             height: '100%',
@@ -48,7 +47,10 @@ export default function HeroSection() {
         <Box
           sx={{
             position: 'absolute',
-            inset: 0,
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             background: 'linear-gradient(to top, #000 10%, transparent 100%)'
           }}
         />
@@ -86,9 +88,8 @@ export default function HeroSection() {
                   component="img"
                   src="/kundan.jpg"
                   alt="Kundan Vats"
-                  loading="eager"
                   onError={(e) => {
-                    e.currentTarget.src = "/logo.jpeg"; // ✅ fixed fallback
+                    e.currentTarget.src = "/logo.jpeg";
                   }}
                   sx={{
                     width: 120,
@@ -96,11 +97,7 @@ export default function HeroSection() {
                     borderRadius: '50%',
                     objectFit: 'cover',
                     border: '4px solid #fff',
-                    boxShadow: '0 0 30px rgba(255,255,255,0.1)',
-                    transition: '0.4s',
-                    '&:hover': {
-                      transform: 'scale(1.08)'
-                    }
+                    boxShadow: '0 0 30px rgba(255,255,255,0.1)'
                   }}
                 />
 

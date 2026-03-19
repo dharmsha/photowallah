@@ -7,7 +7,6 @@ import {
   Container,
   Paper,
   Stack,
-  Avatar,
   Divider
 } from '@mui/material';
 import {
@@ -45,7 +44,6 @@ export default function HeroSection() {
           <source src="/weeding.mp4" type="video/mp4" />
         </video>
 
-        {/* Gradient Overlay */}
         <Box
           sx={{
             position: 'absolute',
@@ -84,28 +82,24 @@ export default function HeroSection() {
               }}
             >
               <Stack spacing={3} alignItems="center">
-                {/* Avatar */}
-                <Avatar
-                  alt="Kundan Vats"
+
+                {/* Profile Image */}
+                <Box
+                  component="img"
                   src="/kundan.jpg"
-                  imgProps={{
-                    loading: 'eager',
-                    // onError: (e) => {
-                    //   e.target.onerror = null;
-                    //   e.target.src = '/logo.jpeg';
-                    // }
+                  alt="Kundan Vats"
+                  onError={(e) => {
+                    e.currentTarget.src = "/logo.jpeg";
                   }}
                   sx={{
                     width: 120,
                     height: 120,
+                    borderRadius: '50%',
+                    objectFit: 'cover',
                     border: '4px solid #fff',
-                    boxShadow: '0 0 30px rgba(255,255,255,0.1)',
-                    bgcolor: '#111',
-                    fontSize: 40
+                    boxShadow: '0 0 30px rgba(255,255,255,0.1)'
                   }}
-                >
-                  K
-                </Avatar>
+                />
 
                 {/* Name */}
                 <Box>
@@ -131,9 +125,7 @@ export default function HeroSection() {
                   ))}
                 </Stack>
 
-                <Divider
-                  sx={{ width: '60%', borderColor: 'rgba(255,255,255,0.1)' }}
-                />
+                <Divider sx={{ width: '60%', borderColor: 'rgba(255,255,255,0.1)' }} />
 
                 {/* Description */}
                 <Typography
@@ -146,6 +138,7 @@ export default function HeroSection() {
                 >
                   Turning your special moments into a timeless cinematic experience.
                 </Typography>
+
               </Stack>
             </Paper>
           </Box>
@@ -195,6 +188,7 @@ export default function HeroSection() {
             </Box>
           ))}
         </Box>
+
       </Container>
     </Box>
   );

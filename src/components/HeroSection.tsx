@@ -89,7 +89,7 @@ export default function HeroSection() {
                   src="/kundan.jpg"
                   alt="Kundan Vats"
                   onError={(e) => {
-                    e.currentTarget.src = "/kundan.jpg";
+                    e.currentTarget.src = "/logo.jpeg";
                   }}
                   sx={{
                     width: 120,

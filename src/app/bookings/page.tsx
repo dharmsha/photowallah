@@ -88,7 +88,7 @@ export default function BookingPage() {
                 </div>
                 <div>
                   <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Call Us</p>
-                  <p className="text-lg font-bold">+91 7404980061</p>
+                  <p className="text-lg font-bold">+91 </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">

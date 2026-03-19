@@ -62,7 +62,7 @@ export default function DownloadAppPage() {
               </h1>
               
               <p className="text-xl text-gray-600 mb-8">
-                Download the DostPhoto app to access your wedding photos, 
+                Download the VatsPhoto app to access your wedding photos, 
                 manage bookings, and stay connected with your photographer.
               </p>
               
